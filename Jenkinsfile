@@ -1,7 +1,5 @@
 pipeline {
-    agent {
-        docker { image 'docker:latest' }
-    }
+    agent any
 
     environment {
         // Docker Hub configuration
@@ -10,8 +8,8 @@ pipeline {
         DOCKER_IMAGE_TAG = "${env.BUILD_NUMBER}"
         DOCKER_IMAGE = "${DOCKER_IMAGE_NAME}:${DOCKER_IMAGE_TAG}"
         DOCKER_IMAGE_LATEST = "${DOCKER_IMAGE_NAME}:latest"
-        
-        // Credentials ID (make sure this exists in Jenkins)
+
+        // Credentials ID in Jenkins
         DOCKERHUB_CREDENTIALS = 'dockerhub-credentials'
     }
 
@@ -46,7 +44,6 @@ pipeline {
                 script {
                     try {
                         echo "Testing Docker image..."
-                        // Run a quick test to ensure the image works
                         sh "docker run --rm ${DOCKER_IMAGE} python -c 'import flask; print(\"Flask imported successfully\")'"
                         echo "Docker image test passed"
                     } catch (Exception e) {
@@ -66,11 +63,11 @@ pipeline {
                         withCredentials([usernamePassword(credentialsId: DOCKERHUB_CREDENTIALS, usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD')]) {
                             sh "echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin"
                         }
-                        
+
                         echo "Pushing image to Docker Hub..."
                         sh "docker push ${DOCKER_IMAGE}"
                         sh "docker push ${DOCKER_IMAGE_LATEST}"
-                        
+
                         echo "Successfully pushed ${DOCKER_IMAGE} and ${DOCKER_IMAGE_LATEST} to Docker Hub"
                     } catch (Exception e) {
                         echo "Failed to push to Docker Hub: ${e.getMessage()}"
