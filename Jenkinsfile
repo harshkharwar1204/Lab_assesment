@@ -1,6 +1,11 @@
 pipeline {
     agent any
 
+    tools {
+        // This name must exactly match the one you just saved
+        docker 'docker-tool'
+    }
+    
     environment {
         // Replace 'your-dockerhub-username' with your actual username
         DOCKER_IMAGE = "kharwarharsh1204/flask-app:${env.BUILD_NUMBER}"
