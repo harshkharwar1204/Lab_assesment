@@ -28,7 +28,7 @@ pipeline {
                 script {
                     try {
                         echo "Building Docker image..."
-                        sh "docker build -t ${DOCKER_IMAGE} -t ${DOCKER_IMAGE_LATEST} ."
+                        bat "docker build -t ${DOCKER_IMAGE} -t ${DOCKER_IMAGE_LATEST} ."
                         echo "Docker image built successfully"
                     } catch (Exception e) {
                         echo "Failed to build Docker image: ${e.getMessage()}"
@@ -44,7 +44,7 @@ pipeline {
                 script {
                     try {
                         echo "Testing Docker image..."
-                        sh "docker run --rm ${DOCKER_IMAGE} python -c 'import flask; print(\"Flask imported successfully\")'"
+                        bat "docker run --rm ${DOCKER_IMAGE} python -c 'import flask; print(\"Flask imported successfully\")'"
                         echo "Docker image test passed"
                     } catch (Exception e) {
                         echo "Failed to test Docker image: ${e.getMessage()}"
@@ -65,8 +65,8 @@ pipeline {
                         }
 
                         echo "Pushing image to Docker Hub..."
-                        sh "docker push ${DOCKER_IMAGE}"
-                        sh "docker push ${DOCKER_IMAGE_LATEST}"
+                        bat "docker push ${DOCKER_IMAGE}"
+                        bat "docker push ${DOCKER_IMAGE_LATEST}"
 
                         echo "Successfully pushed ${DOCKER_IMAGE} and ${DOCKER_IMAGE_LATEST} to Docker Hub"
                     } catch (Exception e) {
@@ -83,7 +83,7 @@ pipeline {
                 script {
                     try {
                         echo "Cleaning up local Docker images..."
-                        sh "docker rmi ${DOCKER_IMAGE} ${DOCKER_IMAGE_LATEST} || true"
+                        bat "docker rmi ${DOCKER_IMAGE} ${DOCKER_IMAGE_LATEST} || true"
                         echo "Cleanup completed"
                     } catch (Exception e) {
                         echo "Cleanup failed (non-critical): ${e.getMessage()}"
