@@ -44,7 +44,7 @@ pipeline {
                 script {
                     try {
                         echo "Testing Docker image..."
-                        bat "docker run --rm ${DOCKER_IMAGE} python -c 'import flask; print(\"Flask imported successfully\")'"
+                        bat '''docker run --rm dhruv99269/flask-app:5 python -c "import flask; print(\\"Flask imported successfully\\")"'''
                         echo "Docker image test passed"
                     } catch (Exception e) {
                         echo "Failed to test Docker image: ${e.getMessage()}"
