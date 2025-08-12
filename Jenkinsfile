@@ -7,12 +7,6 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
-            steps {
-                // Replace with your repository URL
-                git 'https://github.com/harshkharwar1204/Lab_assesment.git'
-            }
-        }
         stage('Build Docker Image') {
             steps {
                 script {
